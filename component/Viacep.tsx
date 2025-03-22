@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { ScrollView } from 'react-native';
 import { Text, TextInput  } from 'react-native-paper';
 import { List } from 'react-native-paper'
+import estilo from './css/Estilo';
 
 const ViaCep=()=>{
 
     //variáveis
     let [cep, setCep] = useState("")
-    let [dados, setDados] = useState("")
+    let [dados, setDados] = useState<{ logradouro?: string; bairro?: string; localidade?: string }>({});
     let [expandir, setExpandir] = useState(false);
     const [valorSelecionado, setValorSelecionado] = useState("")
     const handlePress = () => setExpandir(!expandir);
@@ -43,8 +44,7 @@ const ViaCep=()=>{
     //
     return(
         <ScrollView>
-            <Text variant="displayLarge" style={{color:'#fff', backgroundColor:'#000', borderRadius:10}} >ViaCep Rest</Text>
-            <br/>
+            <Text variant="displayLarge" style={estilo.titulo}>Login</Text>
             <TextInput
                 label="CEP"
                 onChangeText={(value)=>{setCep(value)}}
