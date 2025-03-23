@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from "react-native";
 
-// Constantes das dimensões da tela
+// Obtendo as dimensões da tela
 const { width, height } = Dimensions.get("window");
 
 // Definição do objeto de estilo
@@ -11,24 +11,24 @@ const estilo = StyleSheet.create({
         height: height
     },
     header: {
-        height: 0.09 * height,
+        height: height * 0.09,
         backgroundColor: "#4d4d4d",
         flexDirection: "row", 
         alignItems: "center",  
-        paddingHorizontal: 0.05 * width, 
+        paddingHorizontal: width * 0.05, 
         justifyContent: "space-between" 
     },
     titulo: {
         color: "#fff",
         fontSize: 20,
         fontWeight: "bold",
-        marginTop: 0.03 * height
+        marginTop: height * 0.03
     },
     icone: {
         color: "#fff",
         fontSize: 20,
         fontWeight: "bold",
-        marginTop: 0.03 * height
+        marginTop: height * 0.03
     },
     login: {
         color: "#000",
@@ -37,24 +37,37 @@ const estilo = StyleSheet.create({
         textAlign: "center",
     },
     viacep: {
-        marginTop: 0.02 * height, 
-        marginStart: 0.05 * width,
-        marginEnd: 0.05 * width
+        marginTop: height * 0.02, 
+        marginStart: width * 0.05,
+        marginEnd: width * 0.05
     },
-    btngroup:{
-
+    btngroup: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between" 
     },
     btn: {
-        
+        backgroundColor: "#4d4d4d",
+        width: width * 0.448,
+        padding: height * 0.02,
+        borderRadius: 10
     },
     txtbtn: {
-
+        color: "#ffffff",
+        textAlign: "center",
+        justifyContent: "center",
+        fontSize: 15,
+        fontWeight: "bold"
     },
     footer: {
-        marginTop: 0.07 * height,
-        height: 0.05 * height,
+        position: 'absolute',
+        bottom: height - 880,
+        left: 0,
+        right: 0,
+        height: height * 0.05,
+     
         backgroundColor: "#4d4d4d",
-        paddingHorizontal: 0.05 * width, 
+        alignItems: 'center',
         justifyContent: "space-between" 
     }
 });
