@@ -1,159 +1,212 @@
+//importando elementos 
 import * as React from 'react';
 import { useState } from 'react';
 import { View, Pressable, ScrollView } from 'react-native';
-import { Text, TextInput, List, Button, Dialog, Portal, PaperProvider  } from 'react-native-paper';
+import { Text, TextInput, List, Button, Dialog, Portal, PaperProvider, Card, Provider } from 'react-native-paper';
 import estilo from './css/Estilo';
 
-const ViaCep=()=>{
-
-    //variáveis
-    let [cep, setCep] = useState("")
-    let [dados, setDados] = useState<{ logradouro?: string; bairro?: string; localidade?: string }>({});
+//função default
+const ViaCep =()=> {
+    
+    //variáveis e constantes
+    let [cep, setCep] = useState("");
+    let [dados, setDados] = useState<{ logradouro?: string; bairro?: string; localidade?: string; uf?: string }>({});
     let [expandir, setExpandir] = useState(false);
-    const [valorSelecionado, setValorSelecionado] = useState("")
+    let [nome, setNome] = useState(""); 
+    let [email, setEmail] = useState(""); 
+    let [numero, setNumero] = useState(""); 
+    let [complemento, setComplemento] = useState("");  
+    const [valorSelecionado, setValorSelecionado] = useState("");
+    const [visivelSucesso, setVisivelSucesso] = useState(false);
+    const [visivelErro, setVisivelErro] = useState(false);
     const pressionado = () => setExpandir(!expandir);
-
-    const [visivel, setVisivel] = React.useState(false);
-    const mostrarDialogo = () => setVisivel(true);
-    const esconderDialogo = () => setVisivel(false);
+    const mostrarDialogoSucesso = () => setVisivelSucesso(true);
+    const esconderDialogoSucesso = () => setVisivelSucesso(false);
+    const mostrarDialogoErro = () => setVisivelErro(true);
+    const esconderDialogoErro = () => setVisivelErro(false);
 
     //funções
-    const BuscaCep =(cep)=>{
-        let url = `https://viacep.com.br/ws/${cep}/json`
-        //protocolo http 
-        fetch(url)
-        .then(
-            (resp)=>{ 
-                return resp.json()
-                setVisivel(false)
-             }
-        )
-        .then(            
-            (dados)=>{
-                console.log(dados) 
-                setDados(dados)
-                setValorSelecionado(dados.uf)
-            }   
-        )
-        .catch(
-            (x)=>{ 
-                setVisivel(true)
-             }
-        )
-        
-    }
+    const BuscaCep = (cep: string) => {
+        if (!cep.trim()) return; 
     
-    const ItemPressionado =(value)=>{
-        setValorSelecionado(value)
-        setExpandir(false)
+        let url = `https://viacep.com.br/ws/${cep}/json`;
+    
+        fetch(url)
+            .then((resp) => resp.json())
+            .then((dados) => {
+                if (dados.erro) {
+                    mostrarDialogoErro();
+                } else {
+                    console.log(dados);
+                    setDados(dados);
+                    setValorSelecionado(dados.uf || "");
+                }
+            })
+            .catch(() => {
+                mostrarDialogoErro();
+            });
+    };
+
+    const ItemPressionado = (value: string) => {
+        setValorSelecionado(value);
+        setExpandir(false);
+    };
+
+    const cadastrar = () => {
+       
+        
+        setCep("");
+        setDados({});
+        setExpandir(false);
+        setValorSelecionado("");
+        setNome("");  
+        setEmail(""); 
+        setNumero("");
+        setComplemento("") 
+        mostrarDialogoSucesso();
+    };
+
+    const atualizar = () => {
+        setCep("");
+        setDados({});
+        setExpandir(false);
+        setValorSelecionado("");
+        setNome("");  
+        setEmail(""); 
+        setNumero("");
+        setComplemento("") 
     }
 
-    const cadastrar =()=>{
-        setCep("")
-        setDados({})
-        setExpandir(false)
-        setValorSelecionado("")
-        mostrarDialogo()
-    }
 
-    //
-    return(
+    
+    //layout
+    return (
         <ScrollView>
-            <Text variant="displayLarge" style={estilo.login}>Login</Text>
-            <TextInput
-                label="Nome"
-                mode="outlined"
-            />
-            <TextInput
-                label="Email"
-                mode="outlined"
-            />
-            <TextInput
-                label="CEP"
-                onChangeText={(value)=>{setCep(value)}}
-                mode="outlined"
-                onBlur={()=>{BuscaCep(cep)}}
-                keyboardType="numeric"
-            />
-            <TextInput
-                label="Rua"
-                value = {dados.logradouro == null ? "" : dados.localidade}
-                onChangeText={(value)=>{setCep(dados.logradouro = value)}}
-                mode="outlined"
-            />
-            <TextInput
-                label="Número"
-                mode="outlined"
-                keyboardType="numeric"
-            />
-            <TextInput
-                label="Complemento"
-                mode="outlined"
-            />
-            <TextInput
-                label="Bairro"
-                value = {dados.bairro == null ? "" : dados.bairro}
-                onChangeText={(value)=>{setCep(dados.bairro = value)}}
-                mode="outlined"
-            />
-            <TextInput
-                label="Cidade"
-                value = {dados.localidade == null ? "" : dados.localidade}
-                onChangeText={(value)=>{setCep(dados.localidade = value)}}
-                mode="outlined"
-            />
-            <List.Section title="Estado">
-                <List.Accordion title={valorSelecionado == "" ? "Selecione o Estado" : valorSelecionado} expanded={expandir} onPress={pressionado}>
-                    <List.Item title="AC" onPress={() => { ItemPressionado("AC") }} />
-                    <List.Item title="AL" onPress={() => { ItemPressionado("AL") }} />
-                    <List.Item title="AM" onPress={() => { ItemPressionado("AM") }} />
-                    <List.Item title="AP" onPress={() => { ItemPressionado("AP") }} />
-                    <List.Item title="BA" onPress={() => { ItemPressionado("BA") }} />
-                    <List.Item title="CE" onPress={() => { ItemPressionado("CE") }} />
-                    <List.Item title="DF" onPress={() => { ItemPressionado("DF") }} />
-                    <List.Item title="ES" onPress={() => { ItemPressionado("ES") }} />
-                    <List.Item title="GO" onPress={() => { ItemPressionado("GO") }} />
-                    <List.Item title="MA" onPress={() => { ItemPressionado("MA") }} />
-                    <List.Item title="MG" onPress={() => { ItemPressionado("MG") }} />
-                    <List.Item title="MS" onPress={() => { ItemPressionado("MS") }} />
-                    <List.Item title="MT" onPress={() => { ItemPressionado("MT") }} />
-                    <List.Item title="PA" onPress={() => { ItemPressionado("PA") }} />
-                    <List.Item title="PB" onPress={() => { ItemPressionado("PB") }} />
-                    <List.Item title="PE" onPress={() => { ItemPressionado("PE") }} />
-                    <List.Item title="PI" onPress={() => { ItemPressionado("PI") }} />
-                    <List.Item title="PR" onPress={() => { ItemPressionado("PR") }} />
-                    <List.Item title="RJ" onPress={() => { ItemPressionado("RJ") }} />
-                    <List.Item title="RN" onPress={() => { ItemPressionado("RN") }} />
-                    <List.Item title="RO" onPress={() => { ItemPressionado("RO") }} />
-                    <List.Item title="RR" onPress={() => { ItemPressionado("RR") }} />
-                    <List.Item title="RS" onPress={() => { ItemPressionado("RS") }} />
-                    <List.Item title="SC" onPress={() => { ItemPressionado("SC") }} />
-                    <List.Item title="SE" onPress={() => { ItemPressionado("SE") }} />
-                    <List.Item title="SP" onPress={() => { ItemPressionado("SP") }} />
-                    <List.Item title="TO" onPress={() => { ItemPressionado("TO") }} />
-                </List.Accordion>
-            </List.Section>
-            <View style={estilo.btngroup}>
-                <Pressable style={estilo.btn} onPress={cadastrar}>
-                    <Text style={estilo.txtbtn}>Enviar</Text>
-                </Pressable>
-                <Pressable style={estilo.btn} onPress={() => {}}>
-                    <Text style={estilo.txtbtn}>Cancelar</Text>
-                </Pressable>
-            </View>
+            <Card style={estilo.card}>
+                <Card.Title style={estilo.titulo} title="Cadastro"/>
+                <Card.Content>
+                    <TextInput 
+                        label="Nome" 
+                        mode="flat" 
+                        value={nome} 
+                        onChangeText={setNome} 
+                        style={estilo.input}
+                        underlineStyle={estilo.underline}
+                    />
+                    <TextInput 
+                        label="Email" 
+                        mode="flat" 
+                        value={email} 
+                        onChangeText={setEmail}
+                        style={estilo.input}
+                        underlineStyle={estilo.underline}
+                    />
+                    <TextInput
+                        label="CEP"
+                        value={cep}  
+                        onChangeText={(value) => setCep(value)} 
+                        mode="flat"
+                        onBlur={() => BuscaCep(cep)}  
+                        keyboardType="numeric"
+                        style={estilo.input}
+                        underlineStyle={estilo.underline}
+                    />
+                    <TextInput
+                        label="Rua"
+                        value={dados.logradouro || ""}
+                        onChangeText={(value) => setDados({ ...dados, logradouro: value })}
+                        mode="flat"
+                        style={estilo.input}
+                        underlineStyle={estilo.underline}
+                    />
+                    <TextInput 
+                        label="Número" 
+                        mode="flat" 
+                        keyboardType="numeric" 
+                        value={numero} 
+                        onChangeText={setNumero} 
+                        style={estilo.input}
+                        underlineStyle={estilo.underline}
+                    />
+                    <TextInput 
+                        label="Complemento" 
+                        mode="flat" 
+                        value={complemento} 
+                        onChangeText={setComplemento} 
+                        style={estilo.input}
+                        underlineStyle={estilo.underline}
+                    />
+                    <TextInput
+                        label="Bairro"
+                        value={dados.bairro || ""}
+                        onChangeText={(value) => setDados({ ...dados, bairro: value })}
+                        mode="flat"
+                        style={estilo.input}
+                        underlineStyle={estilo.underline}
+                    />
+                    <TextInput
+                        label="Cidade"
+                        value={dados.localidade || ""}
+                        onChangeText={(value) => setDados({ ...dados, localidade: value })}
+                        mode="flat"
+                        style={estilo.input}
+                        underlineStyle={estilo.underline}
+                    />
+                    <List.Section title="Estado">
+                        <List.Accordion
+                            title={valorSelecionado || "Selecione o Estado"}
+                            expanded={expandir}
+                            onPress={pressionado}
+                        >
+                            <ScrollView style={{ maxHeight: 58 }}> 
+                            {["AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO"].map((estado) => (
+                                <List.Item
+                                key={estado}
+                                title={estado}
+                                onPress={() => ItemPressionado(estado)}
+                                style={estilo.itemList}
+                                />
+                            ))}
+                            </ScrollView>
+                        </List.Accordion>
+                    </List.Section>
+                    <View style={estilo.btngroup}>
+                        <Pressable  
+                            style={({ pressed }) => [
+                                estilo.btn,
+                                pressed ? estilo.btnPressed : estilo.btnNormal  
+                            ]}
+                            onPress={cadastrar}
+                        >
+                            <Text style={estilo.txtbtn}>Enviar</Text>
+                        </Pressable>
+                        <Pressable 
+                            style={({ pressed }) => [
+                                estilo.btn,
+                                pressed ? estilo.btnPressed : estilo.btnNormal  
+                            ]}
+                            onPress={atualizar}
+                        >
+                            <Text style={estilo.txtbtn}>Cancelar</Text>
+                        </Pressable>
+                    </View>
+                </Card.Content>
+            </Card>
             <PaperProvider>
-               
-                <Portal >
-                    <Dialog visible={visivel}>
-                        <Dialog.Title>Cadastrado com Sucesso!</Dialog.Title>
+                <Portal>
+                    <Dialog visible={visivelErro} onDismiss={esconderDialogoErro}>
+                        <Dialog.Title>Alert</Dialog.Title>
+                        <Dialog.Content>
+                        <Text variant="bodyMedium">This is simple dialog</Text>
+                        </Dialog.Content>
                         <Dialog.Actions>
-                            <Button onPress={esconderDialogo}>Ok</Button>
+                        <Button onPress={esconderDialogoErro}>Done</Button>
                         </Dialog.Actions>
                     </Dialog>
                 </Portal>
             </PaperProvider>
-        </ScrollView> 
-    )
-}
+        </ScrollView>
+    );
+};
 
 export default ViaCep;

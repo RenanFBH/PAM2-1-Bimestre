@@ -1,27 +1,58 @@
+//importando elementos 
 import { StatusBar } from 'expo-status-bar';
-import { ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { PaperProvider } from 'react-native-paper';
+import { ImageBackground, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { PaperProvider, IconButton, MD3DarkTheme  } from 'react-native-paper';
 import ViaCep from './component/Viacep';
 import estilo from './component/css/Estilo';
 
-export default function App() {
+const theme = {
+  ...MD3DarkTheme,
+  colors: {
+    ...MD3DarkTheme.colors,
+    primary: '#FFFFFF',
+    onSurface: '#FFFFFF',
+    text: '#FFFFFF',
+    surface: '#25232a',
+  },
+};
+
+
+//função default
+const App =()=> {
   return (
-    <ScrollView>
-      <ImageBackground 
-        source={require('./component/img/bg.jpg')} style={estilo.bg}>
-        <View style={estilo.header}>
-          <Text style={estilo.titulo}>ViaCep Rest</Text>
-          <Text style={estilo.icone}>Icone</Text>
-        </View>
-        <View style={estilo.viacep}>
-          <ViaCep style={estilo.viacep}/>
-          <StatusBar style="auto" />
-        </View>
-        <View style={estilo.footer}>
-          
-        </View>
-      </ImageBackground>
-    </ScrollView>  
+    <ScrollView style={estilo.scroll}>
+      <PaperProvider theme={theme}>
+        <ImageBackground 
+          source={require('./component/img/bg.jpg')} 
+          style={estilo.bg}
+        >
+          <View>
+              <View style={estilo.header}>
+                <Text style={estilo.titulo}>ViaCep Rest</Text>
+                <IconButton 
+                  icon="home" 
+                  size={35} 
+                  iconColor="#fff"  
+                  onPress={() => {}} 
+                  style={estilo.icone}  
+                />
+              </View>
+              <View style={estilo.viacep}>
+                <ViaCep />
+                <StatusBar style="auto" />
+              </View>
+          </View>
+          <View style={estilo.footer}>
+            <Pressable>
+              <Text style={estilo.txt}>Redes sociais</Text>
+            </Pressable>
+            <Pressable>
+              <Text style={estilo.txt}>Sobre nós</Text>
+            </Pressable>
+          </View>
+        </ImageBackground>
+      </PaperProvider>
+    </ScrollView>
   );
 }
-
+export default App;
