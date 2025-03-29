@@ -1,30 +1,18 @@
 //importando elementos 
 import { StatusBar } from 'expo-status-bar';
 import { ImageBackground, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { PaperProvider, IconButton, MD3DarkTheme  } from 'react-native-paper';
+import { PaperProvider, IconButton,   } from 'react-native-paper';
 import ViaCep from './component/Viacep';
 import estilo from './component/css/Estilo';
-
-const theme = {
-  ...MD3DarkTheme,
-  colors: {
-    ...MD3DarkTheme.colors,
-    primary: '#FFFFFF',
-    onSurface: '#FFFFFF',
-    text: '#FFFFFF',
-    surface: '#25232a',
-  },
-};
-
 
 //função default
 const App =()=> {
   return (
     <ScrollView style={estilo.scroll}>
-      <PaperProvider theme={theme}>
+      <PaperProvider>
         <ImageBackground 
           source={require('./component/img/bg.jpg')} 
-          style={estilo.bg}
+          style={[estilo.bg, {resizeMode: 'cover'}]} 
         >
           <View>
               <View style={estilo.header}>

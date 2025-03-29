@@ -9,10 +9,11 @@ const estilo = StyleSheet.create({
     bg: {
         flex: 1,
         width: "100%",
-        height: height > 927 ? height * 1 : height * 1.1
+        height: "100%"
     },
     scroll: {
-        maxHeight: height * 1.5
+        maxHeight: height * 1.5,
+        flexGrow: 1
     },
     card: {
         backgroundColor: "#25232a",
@@ -42,7 +43,7 @@ const estilo = StyleSheet.create({
         color: "#000",
         fontWeight: "bold",
         fontSize: 20,
-        textAlign: "center",
+        textAlign: "center"
     },
     viacep: {
         marginTop: height * 0.02, 
@@ -50,7 +51,7 @@ const estilo = StyleSheet.create({
         marginEnd: width * 0.05
     },
     input: {
-        color: "#000",  // Cor do texto
+        color: "#000", 
         backgroundColor: "transparent"
     },
     underline: {
@@ -71,10 +72,10 @@ const estilo = StyleSheet.create({
         borderRadius: 10
     },
     btnNormal: {
-        backgroundColor: "#4d4d4d", 
+        backgroundColor: "#4d4d4d"
     },
     btnPressed: {
-        backgroundColor: "#000", 
+        backgroundColor: "#000"
     },
     txtbtn: {
         color: "#ffffff",
@@ -87,19 +88,19 @@ const estilo = StyleSheet.create({
         color: "#fff"
     },
     footer: {
-        position: "absolute",  // Deixa fixo
-        bottom: 0,             // Gruda no final da tela
-        width: "100%",         // Ocupa toda a largura
+        bottom: 0,        
+        width: "100%",        
+        marginTop: height * 0.09, 
         height: height * 0.05,
         backgroundColor: "#25232a",
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        paddingHorizontal: width * 0.05,
+        paddingHorizontal: width * 0.05
     },
     footerTextLeft: {
         color: "#fff",
-        fontSize: 16,
+        fontSize: 16
     },
     footerTextRight: {
         color: "#fff",
